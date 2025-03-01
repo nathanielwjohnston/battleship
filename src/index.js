@@ -13,3 +13,5 @@ export function createShip(length) {
 
   return { hit, isSunk };
 }
+
+export function gameboard() {}
