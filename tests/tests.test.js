@@ -86,8 +86,8 @@ describe("gameboard", () => {
   });
 
   describe("checking remaining ships", () => {
+    const gameboard = createGameboard();
     beforeAll(() => {
-      const gameboard = createGameboard();
       gameboard.placeShip(
         [
           ["A", 1],
@@ -113,16 +113,17 @@ describe("gameboard", () => {
         3,
       );
     });
+
     it("should identify remaining ships", () => {
       expect(gameboard.checkRemainingShips()).toBe(3);
     });
 
     it("should react to ships being sunk", () => {
-      gameBoard.receiveAttack(["A", 1]);
-      gameBoard.receiveAttack(["A", 2]);
-      gameBoard.receiveAttack(["A", 3]);
+      gameboard.receiveAttack(["A", 1]);
+      gameboard.receiveAttack(["A", 2]);
+      gameboard.receiveAttack(["A", 3]);
 
-      expect(gameBoard.checkRemainingShips()).toBe(2);
+      expect(gameboard.checkRemainingShips()).toBe(2);
     });
   });
 });
