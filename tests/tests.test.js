@@ -1,4 +1,4 @@
-import { createShip, createGameboard } from "../src";
+import { createShip, createGameboard, createPlayer } from "../src";
 
 describe("ship", () => {
   const ship = createShip(5);
@@ -126,4 +126,19 @@ describe("gameboard", () => {
       expect(gameboard.checkRemainingShips()).toBe(2);
     });
   });
+});
+
+describe("player", () => {
+  it("should be real or a computer", () => {
+    const player1 = createPlayer(true);
+    expect(player1.isReal).toBe(true);
+
+    const player2 = createPlayer(false);
+    expect(player2.isReal).toBe(false);
+  });
+
+  // it("should have a gameboard", () => {
+  //   const player = createPlayer(true);
+  //   expect(player.gameboard).toBeInstanceOf();
+  // });
 });
