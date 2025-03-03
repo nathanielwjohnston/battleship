@@ -57,3 +57,8 @@ export function createGameboard() {
 
   return { placeShip, receiveAttack, checkRemainingShips, misses, hits, ships };
 }
+
+export function createPlayer(isReal) {
+  const gameboard = createGameboard();
+  return { isReal, gameboard };
+}
