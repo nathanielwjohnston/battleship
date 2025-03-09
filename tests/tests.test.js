@@ -1,4 +1,5 @@
 import { createShip, createGameboard, createPlayer } from "../src";
+import { gameController } from "../src/gameController";
 
 describe("ship", () => {
   const ship = createShip(5);
@@ -141,4 +142,12 @@ describe("player", () => {
   //   const player = createPlayer(true);
   //   expect(player.gameboard).toBeInstanceOf();
   // });
+});
+
+describe("game controller", () => {
+  describe("game start", () => {});
+
+  describe("taking turns", () => {});
+
+  describe("game end", () => {});
 });
