@@ -38,3 +38,36 @@ h5,
 h6 {
   overflow-wrap: break-word;
 }
+
+/* ==========================================================================
+  General Layout 
+  ========================================================================== */
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+  Gameboards 
+  ========================================================================== */
+
+.boards-container {
+  display: flex;
+  gap: 10em;
+  flex-direction: row;
+}
+
+.gameboard {
+  height: 30em;
+  width: 30em;
+  display: grid;
+  grid-template-columns: repeat(10, auto);
+}
+
+.grid-square {
+  border: 1px solid;
+  background-color: white;
+}

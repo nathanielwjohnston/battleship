@@ -1,5 +1,5 @@
-import { createShip, createGameboard, createPlayer } from "../src";
-import { gameController } from "../src/gameController";
+import { createShip, createGameboard, createPlayer } from "../src/generator";
+import { startGame, takeTurn, endGame } from "../src/gameController";
 
 describe("ship", () => {
   const ship = createShip(5);
@@ -25,41 +25,50 @@ describe("gameboard", () => {
       expect(
         gameboard.placeShip(
           [
-            ["F", 3],
-            ["F", 4],
+            [5, 3],
+            [5, 4],
           ],
           2,
         ),
       ).toBe(true);
-      expect(gameboard.placeShip([["C", 9]], 1)).toBe(true);
+      expect(gameboard.placeShip([[2, 9]], 1)).toBe(true);
     });
     // These should be rejected by the ui controller anyway, but if the ui is bypassed
-    // it("rejects a ship being placed out of bounds", () => {
+    it("rejects a ship being placed out of bounds", () => {
+      expect(
+        gameboard.placeShip(
+          [
+            [10, 3],
+            [10, 4],
+          ],
+          2,
+        ),
+      ).toBe(false);
+      expect(gameboard.placeShip([[0, 10]], 1)).toBe(false);
+    });
+    it("rejects a ship being placed in another ship's place", () => {
+      expect(
+        gameboard.placeShip(
+          [
+            [4, 3],
+            [5, 3],
+          ],
+          2,
+        ),
+      ).toBe(false);
+      expect(gameboard.placeShip([[2, 9]], 1)).toBe(false);
+    });
+    // it("rejects a ship not on adjacent squares", () => {
     //   expect(
     //     gameboard.placeShip(
     //       [
-    //         ["K", 3],
-    //         ["K", 4],
+    //         [4, 3],
+    //         [6, 3],
     //       ],
     //       2,
     //     ),
     //   ).toBe(false);
-    //   expect(gameboard.placeShip([["A", 0]], 1)).toBe(false);
     // });
-    // it("rejects a ship being placed in another ship's place", () => {
-    //   it("can place a ship", () => {
-    //     expect(
-    //       gameboard.placeShip(
-    //         [
-    //           ["E", 3],
-    //           ["F", 3],
-    //         ],
-    //         2,
-    //       ),
-    //     ).toBe(false);
-    //     expect(gameboard.placeShip([["C", 9]], 1)).toBe(false);
-    // });
-    // it("rejects a ship not on adjacent squares");
   });
 
   describe("receiving an attack", () => {
@@ -145,7 +154,23 @@ describe("player", () => {
 });
 
 describe("game controller", () => {
-  describe("game start", () => {});
+  describe("game start", () => {
+    it("should create players", () => {
+      const players = startGame();
+      for (let player of players) {
+        expect(player).toHaveProperty("isReal");
+
+        expect(player).toHaveProperty("gameboard");
+        expect(player.gameboard.ships).toHaveLength(5);
+        for (let ship of player.gameboard.ships) {
+          for (let coords of ship.coordinatesArray) {
+            expect(Number.isInteger(coords[0])).toBe(true);
+            expect(Number.isInteger(coords[1])).toBe(true);
+          }
+        }
+      }
+    });
+  });
 
   describe("taking turns", () => {});
 

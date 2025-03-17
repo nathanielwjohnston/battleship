@@ -17,8 +17,79 @@ export function createGameboard() {
   const hits = [];
   const misses = [];
 
-  function placeShip(coordinatesArray, length) {
-    const ship = createShip(length);
+  function placeShip(coordinatesArray, shipLength, random = false) {
+    function checkPlacement(coords) {
+      // reject out of bounds
+      if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
+        return false;
+      }
+      // reject ship being placed on another ship
+      for (let ship of ships) {
+        for (let placedCoords of ship.coordinatesArray) {
+          if (coords[0] === placedCoords[0] && coords[1] === placedCoords[1]) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+
+    function createRandomShipPlacement() {
+      let shipCoordinatesArray = [];
+      const directions = { up: -10, down: 10, left: -1, right: 1 };
+      const directionKeys = Object.keys(directions);
+
+      while (shipCoordinatesArray.length < shipLength) {
+        // Resets array if previous coords didn't work
+        shipCoordinatesArray = [];
+        const randomCoordinates = [
+          Math.floor(Math.random() * 100),
+          Math.floor(Math.random() * 100),
+        ];
+        if (!checkPlacement(randomCoordinates)) {
+          continue;
+        } else {
+          shipCoordinatesArray.push(randomCoordinates);
+        }
+        // Based on random number between 0 and the number of directions
+        const randomDirection =
+          directionKeys[Math.floor(Math.random() * directionKeys.length)];
+        let newCoordinates = randomCoordinates;
+        for (let i = 0; i < shipLength - 1; i++) {
+          if (randomDirection === "up" || randomDirection === "down") {
+            newCoordinates = [
+              newCoordinates[0],
+              newCoordinates[1] + directions[randomDirection],
+            ];
+          } else {
+            // left or right
+            newCoordinates = [
+              newCoordinates[0] + directions[randomDirection],
+              newCoordinates[1],
+            ];
+          }
+
+          if (!checkPlacement(newCoordinates)) {
+            break;
+          } else {
+            shipCoordinatesArray.push(newCoordinates);
+          }
+        }
+      }
+
+      return shipCoordinatesArray;
+    }
+
+    if (random) {
+      coordinatesArray = createRandomShipPlacement();
+    } else {
+      for (let coords of coordinatesArray) {
+        if (!checkPlacement(coords)) return false;
+      }
+    }
+
+    const ship = createShip(shipLength);
     ships.push({ shipObject: ship, coordinatesArray });
 
     return true;
