@@ -9,19 +9,59 @@ function makeGameboard(container) {
 }
 
 export function renderGameboards(players) {
-  console.log(players);
-
-  function colourSquare(gameboard, coords, colour) {
+  function styleSquare(gameboard, coords, ship, index) {
     const gameboardWidth = 10;
 
     const gridSquareIndex = coords[0] + coords[1] * gameboardWidth;
-    console.log(gridSquareIndex);
 
     const gridSquares = gameboard.querySelectorAll(".grid-square");
-    console.log(gridSquares);
     const gridSquare = gridSquares[gridSquareIndex];
 
-    gridSquare.style.backgroundColor = colour;
+    gridSquare.classList.add("ship");
+
+    let direction = ship.direction;
+
+    if (direction === "up" || direction === "down") {
+      gridSquare.classList.add("vertical");
+    } else {
+      gridSquare.classList.add("horizontal");
+    }
+
+    if (index < ship.length - 1) {
+      gridSquare.classList.add("middle");
+      return;
+    }
+
+    switch (direction) {
+      case "up":
+        if (index === 0) {
+          gridSquare.classList.add("bottom");
+        } else {
+          gridSquare.classList.add("top");
+        }
+        break;
+      case "down":
+        if (index === 0) {
+          gridSquare.classList.add("top");
+        } else {
+          gridSquare.classList.add("bottom");
+        }
+        break;
+      case "left":
+        if (index === 0) {
+          gridSquare.classList.add("right");
+        } else {
+          gridSquare.classList.add("left");
+        }
+        break;
+      case "right":
+        if (index === 0) {
+          gridSquare.classList.add("left");
+        } else {
+          gridSquare.classList.add("right");
+        }
+        break;
+    }
   }
 
   const gameboards = document.querySelectorAll(".gameboard");
@@ -33,8 +73,8 @@ export function renderGameboards(players) {
     const ships = player.gameboard.ships;
     for (let ship of ships) {
       const coordsArray = ship.coordinatesArray;
-      for (let coords of coordsArray) {
-        colourSquare(gameboard, coords, "black");
+      for (const [index, coords] of coordsArray.entries()) {
+        styleSquare(gameboard, coords, ship, index);
       }
     }
   });

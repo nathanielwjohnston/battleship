@@ -18,6 +18,8 @@ export function createGameboard() {
   const misses = [];
 
   function placeShip(coordinatesArray, shipLength, random = false) {
+    let direction;
+
     function checkPlacement(coords) {
       // reject out of bounds
       if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
@@ -36,6 +38,7 @@ export function createGameboard() {
     }
 
     function createRandomShipPlacement() {
+      let direction;
       let shipCoordinatesArray = [];
       const directions = { up: -1, down: 1, left: -1, right: 1 };
       const directionKeys = Object.keys(directions);
@@ -55,6 +58,7 @@ export function createGameboard() {
         // Based on random number between 0 and the number of directions
         const randomDirection =
           directionKeys[Math.floor(Math.random() * directionKeys.length)];
+        direction = randomDirection;
         let newCoordinates = randomCoordinates;
         for (let i = 0; i < shipLength - 1; i++) {
           if (randomDirection === "up" || randomDirection === "down") {
@@ -78,11 +82,13 @@ export function createGameboard() {
         }
       }
 
-      return shipCoordinatesArray;
+      return [shipCoordinatesArray, direction];
     }
 
     if (random) {
-      coordinatesArray = createRandomShipPlacement();
+      const [coordinatesArrayItem, directionItem] = createRandomShipPlacement();
+      coordinatesArray = coordinatesArrayItem;
+      direction = directionItem;
     } else {
       for (let coords of coordinatesArray) {
         if (!checkPlacement(coords)) return false;
@@ -90,7 +96,12 @@ export function createGameboard() {
     }
 
     const ship = createShip(shipLength);
-    ships.push({ shipObject: ship, coordinatesArray });
+    ships.push({
+      shipObject: ship,
+      coordinatesArray,
+      direction,
+      length: shipLength,
+    });
 
     return true;
   }

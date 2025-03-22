@@ -19,6 +19,7 @@ describe("ship", () => {
 });
 
 describe("gameboard", () => {
+  // TODO: test misses, hits, ships ?
   describe("ship placement", () => {
     const gameboard = createGameboard();
     it("can place a ship", () => {
