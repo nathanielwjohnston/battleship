@@ -37,15 +37,15 @@ export function createGameboard() {
 
     function createRandomShipPlacement() {
       let shipCoordinatesArray = [];
-      const directions = { up: -10, down: 10, left: -1, right: 1 };
+      const directions = { up: -1, down: 1, left: -1, right: 1 };
       const directionKeys = Object.keys(directions);
 
       while (shipCoordinatesArray.length < shipLength) {
         // Resets array if previous coords didn't work
         shipCoordinatesArray = [];
         const randomCoordinates = [
-          Math.floor(Math.random() * 100),
-          Math.floor(Math.random() * 100),
+          Math.floor(Math.random() * 9),
+          Math.floor(Math.random() * 9),
         ];
         if (!checkPlacement(randomCoordinates)) {
           continue;
