@@ -19,7 +19,6 @@ describe("ship", () => {
 });
 
 describe("gameboard", () => {
-  // TODO: test misses, hits, ships ?
   describe("ship placement", () => {
     const gameboard = createGameboard();
     it("can place a ship", () => {
@@ -67,6 +66,8 @@ describe("gameboard", () => {
       expect(ships[0]).toHaveProperty("coordinatesArray");
       expect(ships[0]).toHaveProperty("direction");
       expect(ships[0]).toHaveProperty("length");
+
+      expect(ships[0].direction).toBe("down");
     });
     // it("rejects a ship not on adjacent squares", () => {
     //   expect(

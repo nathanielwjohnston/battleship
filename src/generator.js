@@ -20,6 +20,14 @@ export function createGameboard() {
   function placeShip(coordinatesArray, shipLength, random = false) {
     let direction;
 
+    const directions = {
+      up: [0, -1],
+      down: [0, 1],
+      left: [-1, 0],
+      right: [1, 0],
+    };
+    const directionKeys = Object.keys(directions);
+
     function checkPlacement(coords) {
       // reject out of bounds
       if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
@@ -38,10 +46,7 @@ export function createGameboard() {
     }
 
     function createRandomShipPlacement() {
-      let direction;
       let shipCoordinatesArray = [];
-      const directions = { up: -1, down: 1, left: -1, right: 1 };
-      const directionKeys = Object.keys(directions);
 
       while (shipCoordinatesArray.length < shipLength) {
         // Resets array if previous coords didn't work
@@ -61,18 +66,10 @@ export function createGameboard() {
         direction = randomDirection;
         let newCoordinates = randomCoordinates;
         for (let i = 0; i < shipLength - 1; i++) {
-          if (randomDirection === "up" || randomDirection === "down") {
-            newCoordinates = [
-              newCoordinates[0],
-              newCoordinates[1] + directions[randomDirection],
-            ];
-          } else {
-            // left or right
-            newCoordinates = [
-              newCoordinates[0] + directions[randomDirection],
-              newCoordinates[1],
-            ];
-          }
+          newCoordinates = [
+            newCoordinates[0] + directions[randomDirection][0],
+            newCoordinates[1] + directions[randomDirection][1],
+          ];
 
           if (!checkPlacement(newCoordinates)) break;
 
@@ -80,16 +77,41 @@ export function createGameboard() {
         }
       }
 
-      return [shipCoordinatesArray, direction];
+      return shipCoordinatesArray;
     }
 
     if (random) {
-      const [coordinatesArrayItem, directionItem] = createRandomShipPlacement();
+      const coordinatesArrayItem = createRandomShipPlacement();
       coordinatesArray = coordinatesArrayItem;
-      direction = directionItem;
     } else {
       for (let coords of coordinatesArray) {
         if (!checkPlacement(coords)) return false;
+      }
+
+      // TODO: get direction of manually placed ship
+      getDirection: {
+        if (shipLength === 1) {
+          direction = "single";
+          break getDirection;
+        }
+
+        const firstSquare = coordinatesArray[0];
+        const secondSquare = coordinatesArray[1];
+
+        const difference = [
+          secondSquare[0] - firstSquare[0],
+          secondSquare[1] - firstSquare[1],
+        ];
+
+        // TODO: check this works
+        direction = directionKeys.find((key) => {
+          if (
+            directions[key][0] === difference[0] &&
+            directions[key][1] === difference[1]
+          ) {
+            return true;
+          }
+        });
       }
     }
 

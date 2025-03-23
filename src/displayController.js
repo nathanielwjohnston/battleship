@@ -21,6 +21,10 @@ export function renderGameboards(players) {
 
     let direction = ship.direction;
 
+    if (direction === "single") {
+      return;
+    }
+
     if (direction === "up" || direction === "down") {
       gridSquare.classList.add("vertical");
     } else {
