@@ -59,6 +59,15 @@ describe("gameboard", () => {
       ).toBe(false);
       expect(gameboard.placeShip([[2, 9]], 1)).toBe(false);
     });
+    it("logs all ships", () => {
+      const ships = gameboard.ships;
+      expect(ships).toHaveLength(2);
+
+      expect(ships[0]).toHaveProperty("shipObject");
+      expect(ships[0]).toHaveProperty("coordinatesArray");
+      expect(ships[0]).toHaveProperty("direction");
+      expect(ships[0]).toHaveProperty("length");
+    });
     // it("rejects a ship not on adjacent squares", () => {
     //   expect(
     //     gameboard.placeShip(
