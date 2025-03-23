@@ -46,15 +46,15 @@ export function createGameboard() {
       while (shipCoordinatesArray.length < shipLength) {
         // Resets array if previous coords didn't work
         shipCoordinatesArray = [];
+        const gameboardWidth = 10;
         const randomCoordinates = [
-          Math.floor(Math.random() * 9),
-          Math.floor(Math.random() * 9),
+          Math.floor(Math.random() * (gameboardWidth - 1)),
+          Math.floor(Math.random() * (gameboardWidth - 1)),
         ];
-        if (!checkPlacement(randomCoordinates)) {
-          continue;
-        } else {
-          shipCoordinatesArray.push(randomCoordinates);
-        }
+        if (!checkPlacement(randomCoordinates)) continue;
+
+        shipCoordinatesArray.push(randomCoordinates);
+
         // Based on random number between 0 and the number of directions
         const randomDirection =
           directionKeys[Math.floor(Math.random() * directionKeys.length)];
@@ -74,11 +74,9 @@ export function createGameboard() {
             ];
           }
 
-          if (!checkPlacement(newCoordinates)) {
-            break;
-          } else {
-            shipCoordinatesArray.push(newCoordinates);
-          }
+          if (!checkPlacement(newCoordinates)) break;
+
+          shipCoordinatesArray.push(newCoordinates);
         }
       }
 

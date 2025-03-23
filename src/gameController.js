@@ -9,11 +9,9 @@ export function startGame() {
   for (let i = 0; i < 2; i++) {
     const player = createPlayer(realStatus);
     // TODO: temporary?
-    player.gameboard.placeShip([], 5, true);
-    player.gameboard.placeShip([], 4, true);
-    player.gameboard.placeShip([], 3, true);
-    player.gameboard.placeShip([], 3, true);
-    player.gameboard.placeShip([], 2, true);
+    shipLengths.forEach((length) => {
+      player.gameboard.placeShip([], length, true);
+    });
     players.push(player);
 
     realStatus = false;

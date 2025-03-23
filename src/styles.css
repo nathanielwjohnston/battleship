@@ -72,44 +72,53 @@ body {
   background-color: white;
 }
 
+/* Ships */
+
 .ship {
   border-color: white;
   background-color: black;
 }
 
-.ship.vertical.top {
+.ship.vertical {
+  border-right-style: solid;
+  border-left-style: solid;
+}
+
+.ship.horizontal {
   border-top-style: solid;
-  border-right-style: solid;
-  border-bottom-style: none;
-  border-left-style: solid;
-}
-.ship.vertical.bottom {
-  border-top-style: none;
-  border-right-style: solid;
   border-bottom-style: solid;
-  border-left-style: solid;
 }
+
+.ship.vertical.top,
+.ship.vertical.middle {
+  border-bottom-style: none;
+}
+
+.ship.vertical.bottom,
 .ship.vertical.middle {
   border-top-style: none;
-  border-right-style: solid;
-  border-bottom-style: none;
-  border-left-style: solid;
 }
-.ship.horizontal.left {
-  border-top-style: solid;
+
+.ship.horizontal.left,
+.ship.horizontal.middle {
   border-right-style: none;
+}
+
+.ship.horizontal.right,
+.ship.horizontal.middle {
+  border-left-style: none;
+}
+
+.ship.vertical.top {
+  border-top-style: solid;
+}
+.ship.vertical.bottom {
   border-bottom-style: solid;
+}
+
+.ship.horizontal.left {
   border-left-style: solid;
 }
 .ship.horizontal.right {
-  border-top-style: solid;
   border-right-style: solid;
-  border-bottom-style: solid;
-  border-left-style: none;
-}
-.ship.horizontal.middle {
-  border-top-style: solid;
-  border-right-style: none;
-  border-bottom-style: solid;
-  border-left-style: none;
 }
