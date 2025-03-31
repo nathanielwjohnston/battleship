@@ -1,4 +1,3 @@
-import { createShip, createGameboard, createPlayer } from "../src/generator";
 import { setupTurn, verifyTurn } from "./gameController";
 
 function getGridIndex(coords) {
@@ -79,12 +78,38 @@ export async function attackSequence(
 }
 
 function makeGameboard(container) {
+  const gameboard = container.querySelector(".gameboard");
   for (let i = 0; i < 100; i++) {
     const newGridSquare = document.createElement("div");
     newGridSquare.classList.add("grid-square");
     newGridSquare.dataset.index = i;
-    container.appendChild(newGridSquare);
+    gameboard.appendChild(newGridSquare);
   }
+
+  function createAxes(axis) {
+    let characterCode;
+    if (axis.classList.contains("x-axis")) {
+      characterCode = 65;
+    } else {
+      characterCode = 48;
+    }
+    for (let i = 0; i < 10; i++) {
+      const newAxisMarker = document.createElement("div");
+      newAxisMarker.classList.add("axis-marker");
+      const tag = document.createTextNode(
+        `${String.fromCharCode(characterCode)}`,
+      );
+      characterCode += 1;
+      newAxisMarker.appendChild(tag);
+      axis.appendChild(newAxisMarker);
+    }
+  }
+
+  const xAxis = container.querySelector(".x-axis");
+  createAxes(xAxis);
+
+  const yAxis = container.querySelector(".y-axis");
+  createAxes(yAxis);
 }
 
 export function renderGameboards(players) {
@@ -145,9 +170,11 @@ export function renderGameboards(players) {
     }
   }
 
-  const gameboards = document.querySelectorAll(".gameboard");
+  const gameboardContainers = document.querySelectorAll(".gameboard-container");
 
-  gameboards.forEach(makeGameboard);
+  gameboardContainers.forEach(makeGameboard);
+
+  const gameboards = document.querySelectorAll(".gameboard");
 
   players.forEach((player, index) => {
     const gameboard = gameboards[index];

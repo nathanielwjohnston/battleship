@@ -1,4 +1,4 @@
-import { createShip, createGameboard, createPlayer } from "../src/generator";
+import { createPlayer } from "../src/generator";
 import * as displayController from "../src/displayController";
 
 export function startGame() {

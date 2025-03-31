@@ -1,5 +1,5 @@
 import { createShip, createGameboard, createPlayer } from "../src/generator";
-import { startGame, endGame } from "../src/gameController";
+import { startGame } from "../src/gameController";
 
 describe("ship", () => {
   const ship = createShip(5);
