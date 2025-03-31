@@ -1,5 +1,5 @@
 import { createShip, createGameboard, createPlayer } from "../src/generator";
-import { startGame, takeTurn, endGame } from "../src/gameController";
+import { startGame, endGame } from "../src/gameController";
 
 describe("ship", () => {
   const ship = createShip(5);
@@ -145,6 +145,48 @@ describe("gameboard", () => {
       gameboard.receiveAttack(["A", 3]);
 
       expect(gameboard.checkRemainingShips()).toBe(2);
+    });
+  });
+
+  describe("checking if a square has been attacked", () => {
+    const gameboard = createGameboard();
+    beforeAll(() => {
+      gameboard.placeShip(
+        [
+          ["A", 1],
+          ["A", 2],
+          ["A", 3],
+        ],
+        3,
+      );
+      gameboard.placeShip(
+        [
+          ["C", 1],
+          ["C", 2],
+          ["C", 3],
+        ],
+        3,
+      );
+      gameboard.placeShip(
+        [
+          ["E", 1],
+          ["E", 2],
+          ["E", 3],
+        ],
+        3,
+      );
+    });
+
+    it("should verify a square has been attacked", () => {
+      gameboard.receiveAttack(["A", 1]);
+      expect(gameboard.checkSquareAttacked(["A", 1])).toBe(true);
+
+      gameboard.receiveAttack(["A", 5]);
+      expect(gameboard.checkSquareAttacked(["A", 5])).toBe(true);
+    });
+
+    it("should verify a square has not been attacked", () => {
+      expect(gameboard.checkSquareAttacked(["C", 1])).toBe(false);
     });
   });
 });

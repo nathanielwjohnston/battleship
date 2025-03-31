@@ -21,6 +21,72 @@ export function startGame() {
   return players;
 }
 
-export function takeTurn() {}
+export function setupTurn(currentPlayer, enemyPlayer) {
+  function getRandomAttackCoordinates() {
+    let validAttack = false;
+    const gameboardWidth = 10;
+    let coordinates;
+
+    while (!validAttack) {
+      coordinates = [
+        Math.floor(Math.random() * (gameboardWidth - 1)),
+        Math.floor(Math.random() * (gameboardWidth - 1)),
+      ];
+
+      validAttack = !enemyPlayer.gameboard.checkSquareAttacked(coordinates);
+    }
+
+    return coordinates;
+  }
+
+  if (currentPlayer.isReal) {
+    displayController.getAttackCoordinates(currentPlayer, enemyPlayer);
+  } else {
+    // call function to select random coordinates
+    const attackCoordinates = getRandomAttackCoordinates();
+    verifyTurn(attackCoordinates, currentPlayer, enemyPlayer);
+  }
+}
+
+export function verifyTurn(coordinates, currentPlayer, enemyPlayer) {
+  const enemyGameboard = enemyPlayer.gameboard;
+  const hitSuccess = enemyGameboard.receiveAttack(coordinates);
+  let attackResult;
+  if (hitSuccess) {
+    if (enemyGameboard.checkRemainingShips() === 0) {
+      //endgame
+    }
+
+    attackResult = "hit";
+  } else {
+    attackResult = "miss";
+  }
+
+  displayController.attackSequence(
+    currentPlayer,
+    enemyPlayer,
+    coordinates,
+    attackResult,
+  );
+}
 
 export function endGame() {}
+
+// export function takeTurn(currentPlayer, enemyPlayer) {
+//   function getRandomAttackCoordinates() {
+//     //
+//   }
+
+//   let attackCoordinates;
+//   let validAttack;
+//   while (!validAttack) {
+//     if (currentPlayer.isReal) {
+//       attackCoordinates = displayController.getAttackCoordinates(enemyPlayer);
+//     } else {
+//       // call function to select random coordinates
+//     }
+
+//     validAttack = enemyPlayer.gameboard.receiveAttack(attackCoordinates);
+//     if (!validAttack) alert("invalid attack\nplease try again");
+//   }
+// }

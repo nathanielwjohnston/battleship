@@ -12,10 +12,14 @@ export function createShip(length) {
   return { hit, isSunk };
 }
 
+let gameboardIndex = 0;
+
 export function createGameboard() {
   const ships = [];
   const hits = [];
   const misses = [];
+  const boardIndex = gameboardIndex;
+  gameboardIndex += 1;
 
   function placeShip(coordinatesArray, shipLength, random = false) {
     let direction;
@@ -88,7 +92,7 @@ export function createGameboard() {
         if (!checkPlacement(coords)) return false;
       }
 
-      // TODO: get direction of manually placed ship
+      // Get direction of manually placed ship
       getDirection: {
         if (shipLength === 1) {
           direction = "single";
@@ -103,7 +107,6 @@ export function createGameboard() {
           secondSquare[1] - firstSquare[1],
         ];
 
-        // TODO: check this works
         direction = directionKeys.find((key) => {
           if (
             directions[key][0] === difference[0] &&
@@ -155,7 +158,32 @@ export function createGameboard() {
     return ships.length;
   }
 
-  return { placeShip, receiveAttack, checkRemainingShips, misses, hits, ships };
+  function checkSquareAttacked(coordinates) {
+    for (let hit of hits) {
+      if (hit[0] === coordinates[0] && hit[1] === coordinates[1]) {
+        return true;
+      }
+    }
+
+    for (let miss of misses) {
+      if (miss[0] === coordinates[0] && miss[1] === coordinates[1]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return {
+    placeShip,
+    receiveAttack,
+    checkRemainingShips,
+    checkSquareAttacked,
+    misses,
+    hits,
+    ships,
+    boardIndex,
+  };
 }
 
 export function createPlayer(isReal) {

@@ -72,6 +72,22 @@ body {
   background-color: white;
 }
 
+.boards-container .gameboard-container:nth-child(2) .grid-square {
+  cursor: pointer;
+}
+
+.boards-container
+  .gameboard-container:nth-child(2)
+  .gameboard:not(.off)
+  .grid-square:hover {
+  border: 1px solid red;
+}
+
+.gameboard.off .grid-square {
+  opacity: 50%;
+  cursor: default !important;
+}
+
 /* Ships */
 
 .ship {
@@ -121,4 +137,50 @@ body {
 }
 .ship.horizontal.right {
   border-right-style: solid;
+}
+
+/* Square attacks */
+
+.hit {
+  background-color: green;
+}
+
+.miss {
+  background-color: red;
+}
+
+.attacking {
+  animation: pulse 2s infinite;
+}
+
+.attacking.ship {
+  animation: shipPulse 2s infinite;
+}
+
+@keyframes shipPulse {
+  30% {
+    background-color: red;
+  }
+
+  60% {
+    background-color: black;
+  }
+
+  90% {
+    background-color: red;
+  }
+}
+
+@keyframes pulse {
+  30% {
+    background-color: red;
+  }
+
+  60% {
+    background-color: white;
+  }
+
+  90% {
+    background-color: red;
+  }
 }
