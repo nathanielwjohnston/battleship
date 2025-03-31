@@ -58,10 +58,17 @@ export async function attackSequence(
   gridSquare.classList.remove("attacking");
   // Change style of square attacked
   styleSquareAttack(enemyPlayer, coords, attackResult);
-  // Wait
-  await delay(2000);
+  // Wait if computer
+  if (!currentPlayer.isReal) {
+    await delay(2000);
+  }
   // Turn off gameboard
   enemyGameboard.classList.add("off");
+
+  if (enemyPlayer.gameboard.checkRemainingShips() === 0) {
+    endGame(currentPlayer);
+    return;
+  }
   // Setup next turn
   if (attackResult === "hit") {
     setupTurn(currentPlayer, enemyPlayer);
@@ -180,4 +187,17 @@ export function getAttackCoordinates(currentPlayer, enemyPlayer) {
 
     verifyTurn(coordinates, currentPlayer, enemyPlayer);
   });
+}
+
+function endGame(winner) {
+  const messageBox = document.querySelector(".message-container h1");
+  let message;
+  // Will only work for 1 player
+  if (winner.isReal) {
+    message = document.createTextNode("You won!");
+  } else {
+    message = document.createTextNode("You lost...");
+  }
+
+  messageBox.appendChild(message);
 }

@@ -53,10 +53,6 @@ export function verifyTurn(coordinates, currentPlayer, enemyPlayer) {
   const hitSuccess = enemyGameboard.receiveAttack(coordinates);
   let attackResult;
   if (hitSuccess) {
-    if (enemyGameboard.checkRemainingShips() === 0) {
-      //endgame
-    }
-
     attackResult = "hit";
   } else {
     attackResult = "miss";
@@ -69,24 +65,3 @@ export function verifyTurn(coordinates, currentPlayer, enemyPlayer) {
     attackResult,
   );
 }
-
-export function endGame() {}
-
-// export function takeTurn(currentPlayer, enemyPlayer) {
-//   function getRandomAttackCoordinates() {
-//     //
-//   }
-
-//   let attackCoordinates;
-//   let validAttack;
-//   while (!validAttack) {
-//     if (currentPlayer.isReal) {
-//       attackCoordinates = displayController.getAttackCoordinates(enemyPlayer);
-//     } else {
-//       // call function to select random coordinates
-//     }
-
-//     validAttack = enemyPlayer.gameboard.receiveAttack(attackCoordinates);
-//     if (!validAttack) alert("invalid attack\nplease try again");
-//   }
-// }

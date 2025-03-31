@@ -45,8 +45,16 @@ h6 {
 
 body {
   height: 100vh;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 10em auto;
   align-items: center;
+  justify-content: center;
+}
+
+.message-container {
+  grid-column: span 2;
+  display: flex;
   justify-content: center;
 }
 
