@@ -1,5 +1,11 @@
 import { setupTurn, verifyTurn } from "./gameController";
 
+function displayMessage(message) {
+  const messageBox = document.querySelector(".message-container h1");
+
+  messageBox.textContent = message;
+}
+
 function getGridIndex(coords) {
   const gameboardWidth = 10;
 
@@ -27,8 +33,6 @@ export function styleSquareAttack(enemyPlayer, coords, attackResult) {
   }
 }
 
-// not currently using await. the idea is that the code can run elsewhere but
-// this may cause issues when calling the setup turn function at the bottom
 export async function attackSequence(
   currentPlayer,
   enemyPlayer,
@@ -42,6 +46,7 @@ export async function attackSequence(
   // Turn on gameboard if computer
   // Wait if computer
   if (!currentPlayer.isReal) {
+    displayMessage("Attack Incoming!");
     enemyGameboard.classList.remove("off");
     await delay(2000);
   }
@@ -58,7 +63,10 @@ export async function attackSequence(
   // Change style of square attacked
   styleSquareAttack(enemyPlayer, coords, attackResult);
   // Wait if computer
-  if (!currentPlayer.isReal) {
+  if (
+    !currentPlayer.isReal ||
+    (currentPlayer.isReal && attackResult === "miss")
+  ) {
     await delay(2000);
   }
   // Turn off gameboard
@@ -170,6 +178,73 @@ export function renderGameboards(players) {
     }
   }
 
+  function renderBoard(player, gameboard) {
+    const ships = player.gameboard.ships;
+    for (let ship of ships) {
+      const coordsArray = ship.coordinatesArray;
+      for (const [index, coords] of coordsArray.entries()) {
+        styleSquare(gameboard, coords, ship, index);
+      }
+    }
+  }
+
+  function clearBoard(gameboard) {
+    const gridSquares = gameboard.querySelectorAll(".ship");
+    for (let gridSquare of gridSquares) {
+      // Reset styling on grid squares
+      gridSquare.className = "grid-square";
+    }
+  }
+
+  function pickShips(player) {
+    // Highlight board for selection
+    const gameboardContainers = document.querySelectorAll(
+      ".gameboard-container",
+    );
+    const gameboardContainer = gameboardContainers[player.gameboard.boardIndex];
+    const gameboard = gameboardContainer.querySelector(".gameboard");
+    gameboard.classList.remove("off");
+
+    const randomiseButton = document.createElement("button");
+    const label = document.createTextNode("Randomise");
+    randomiseButton.appendChild(label);
+    randomiseButton.classList.add("random-button");
+
+    const shipLengths = [5, 4, 3, 3, 2];
+
+    randomiseButton.addEventListener("click", () => {
+      player.gameboard.clearShips();
+      shipLengths.forEach((length) => {
+        player.gameboard.placeShip([], length, true);
+      });
+      clearBoard(gameboard);
+      renderBoard(player, gameboard);
+    });
+
+    const confirmButton = document.createElement("button");
+    const confirmLabel = document.createTextNode("Confirm Selection");
+    confirmButton.appendChild(confirmLabel);
+    confirmButton.classList.add("confirm-button");
+
+    confirmButton.addEventListener("click", () => {
+      gameboard.classList.add("off");
+
+      const randomButton = document.querySelector(".random-button");
+      const button = document.querySelector(".confirm-button");
+
+      randomButton.remove();
+
+      // Set up game after player chooses their positions
+      setupTurn(players[0], players[1]);
+
+      button.remove();
+    });
+
+    // Change to be underneath specific gameboard
+    gameboardContainer.appendChild(randomiseButton);
+    gameboardContainer.appendChild(confirmButton);
+  }
+
   const gameboardContainers = document.querySelectorAll(".gameboard-container");
 
   gameboardContainers.forEach(makeGameboard);
@@ -178,17 +253,16 @@ export function renderGameboards(players) {
 
   players.forEach((player, index) => {
     const gameboard = gameboards[index];
-    const ships = player.gameboard.ships;
-    for (let ship of ships) {
-      const coordsArray = ship.coordinatesArray;
-      for (const [index, coords] of coordsArray.entries()) {
-        styleSquare(gameboard, coords, ship, index);
-      }
+    if (player.isReal) {
+      renderBoard(player, gameboard);
+      pickShips(player);
     }
   });
 }
 
 export function getAttackCoordinates(currentPlayer, enemyPlayer) {
+  displayMessage("Your turn");
+
   const opponentGameboard = document.getElementById(
     `gameboard-${enemyPlayer.gameboard.boardIndex}`,
   );
@@ -217,14 +291,13 @@ export function getAttackCoordinates(currentPlayer, enemyPlayer) {
 }
 
 function endGame(winner) {
-  const messageBox = document.querySelector(".message-container h1");
   let message;
   // Will only work for 1 player
   if (winner.isReal) {
-    message = document.createTextNode("You won!");
+    message = "You won!";
   } else {
-    message = document.createTextNode("You lost...");
+    message = "You lost...";
   }
 
-  messageBox.appendChild(message);
+  displayMessage(message);
 }

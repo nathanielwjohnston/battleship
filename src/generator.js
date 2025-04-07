@@ -129,6 +129,10 @@ export function createGameboard() {
     return true;
   }
 
+  function clearShips() {
+    ships.splice(0, ships.length);
+  }
+
   function receiveAttack(coordinates) {
     for (let ship of ships) {
       const gridSquares = ship.coordinatesArray;
@@ -176,6 +180,7 @@ export function createGameboard() {
 
   return {
     placeShip,
+    clearShips,
     receiveAttack,
     checkRemainingShips,
     checkSquareAttacked,
