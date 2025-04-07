@@ -69,17 +69,6 @@ describe("gameboard", () => {
 
       expect(ships[0].direction).toBe("down");
     });
-    // it("rejects a ship not on adjacent squares", () => {
-    //   expect(
-    //     gameboard.placeShip(
-    //       [
-    //         [4, 3],
-    //         [6, 3],
-    //       ],
-    //       2,
-    //     ),
-    //   ).toBe(false);
-    // });
   });
 
   describe("receiving an attack", () => {
@@ -199,11 +188,6 @@ describe("player", () => {
     const player2 = createPlayer(false);
     expect(player2.isReal).toBe(false);
   });
-
-  // it("should have a gameboard", () => {
-  //   const player = createPlayer(true);
-  //   expect(player.gameboard).toBeInstanceOf();
-  // });
 });
 
 describe("game controller", () => {
